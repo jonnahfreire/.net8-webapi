@@ -41,6 +41,9 @@ public class UserService(IUserRepository userRepository, ILogger<UserService> lo
     {
         if (user == null) throw new ArgumentNullException("User data is required");
 
+        var userAlreadyExists = await userRepository.GetByEmailAsync(user.Email);
+        if (userAlreadyExists != null) throw new ConflictException("A user with this email already exists.");
+
         logger.LogInformation("Adding a new user to the database.");
         await userRepository.AddAsync(new User(user.Name, user.Email));
         await uow.CommitAsync();

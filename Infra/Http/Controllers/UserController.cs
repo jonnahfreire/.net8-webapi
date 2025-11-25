@@ -1,16 +1,19 @@
 ﻿using API.Application.DTOs;
 using API.Application.DTOs.User;
 using API.Application.Services;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Infra.Http.Controllers;
 
-[Route("api/v1/users")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/users")]
 [ApiController]
 public class UserController(UserService userService, AuthService authService) : BaseController
 {
     [Authorize]
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -26,18 +29,6 @@ public class UserController(UserService userService, AuthService authService) : 
         if (user is null) return NotFound();
 
         return Ok(user);
-    }
-
-    [HttpGet("{id:guid}/token")]
-    public async Task<IActionResult> GetTokenByUserId(Guid id)
-    {
-        var user = await userService.GetUserById(id);
-        if (user is null) return NotFound();
-
-        var token = authService.GenerateToken(new Domain.Entities.User(user.Name, user.Email));
-        if (token is null) return NotFound();
-
-        return Ok(new { Token = token });
     }
 
     [Authorize]
@@ -64,5 +55,17 @@ public class UserController(UserService userService, AuthService authService) : 
     {
         await userService.RemoveUser(id);
         return OkResult("Usuário removido com sucesso");
+    }  
+    
+    [HttpGet("{id:guid}/token")]
+    public async Task<IActionResult> GetTokenByUserId(Guid id)
+    {
+        var user = await userService.GetUserById(id);
+        if (user is null) return NotFound();
+
+        var token = authService.GenerateToken(new Domain.Entities.User(user.Name, user.Email));
+        if (token is null) return NotFound();
+
+        return Ok(new { Token = token });
     }
 }

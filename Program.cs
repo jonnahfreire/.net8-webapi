@@ -15,11 +15,14 @@ builder.Services.AddGlobalExceptionHandler();
 builder.Services.AddJsonOptions();
 builder.Services.AddJwtConfiguration(builder.Configuration); // Autenticação com JWT
 builder.Services.AddPolicies(builder.Configuration); // Policies
-builder.Services.AddSwaggerAuthorization(builder.Configuration); // Configura Autorização no Swagger
+
+// Configura Swagger
+builder.Services.AddSwaggerServices();
+builder.Services.AddSwaggerAuthorization(); 
 
 var app = builder.Build();
-app.UseMiddleware<ExceptionHandler>();
-app.AddSwaggerUI();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
 
-namespace API.Infra.Configuration;
+namespace API.Infra.Extensions;
 
 public static class JwtConfigurationExtensions
 {

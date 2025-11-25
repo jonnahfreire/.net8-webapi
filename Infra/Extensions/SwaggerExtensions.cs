@@ -1,28 +1,54 @@
-﻿namespace API.Infra.Configuration;
+﻿using API.Infra.Extensions;
+using API.Infra.Http.Swagger;
+using Asp.Versioning.ApiExplorer;
+using Microsoft.OpenApi.Models;
+
+namespace API.Infra.Extensions;
 
 public static class SwaggerExtensions
 {
-    public static IServiceCollection AddSwaggerAuthorization(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddSwaggerServices(this IServiceCollection services)
     {
+        services.AddApiVersioning(options =>
+        {
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+            options.ReportApiVersions = true;
+        })
+            .AddMvc()
+            .AddApiExplorer(setup =>
+            {
+                setup.GroupNameFormat = "'v'VVV";
+                setup.SubstituteApiVersionInUrl = true;
+            });
+
+        services.ConfigureOptions<SwaggerGenOptionsConfig>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddSwaggerAuthorization(this IServiceCollection services)
+    {        
         services.AddSwaggerGen(c =>
         {
-            c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            c.OperationFilter<SwaggerDefaultValues>();
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
-                Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
-                In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                In = ParameterLocation.Header,
                 Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
             });
-            c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
-                    new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                    new OpenApiSecurityScheme
                     {
-                        Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                        Reference = new OpenApiReference
                         {
-                            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                            Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
                         }
                     },
@@ -30,14 +56,22 @@ public static class SwaggerExtensions
                 }
             });
         });
+
         return services;
     }
-    public static IApplicationBuilder AddSwaggerUI(this WebApplication app)
+    public static IApplicationBuilder UseSwaggerUI(this WebApplication app)
     {
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(options =>
+            {
+                var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+                foreach (var description in provider.ApiVersionDescriptions)
+                {
+                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", $"Web Api - {description.GroupName.ToUpperInvariant()} ");
+                }
+            });
         }
 
         return app;
