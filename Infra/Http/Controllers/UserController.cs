@@ -1,23 +1,22 @@
-﻿using API.Application.DTOs;
-using API.Application.DTOs.User;
-using API.Application.Services;
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using WebApi.Application.DTOs.User;
+using WebApi.Application.Services;
 
-namespace API.Infra.Http.Controllers;
+namespace WebApi.Infra.Http.Controllers;
 
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/users")]
 [ApiController]
 public class UserController(UserService userService, AuthService authService) : BaseController
 {
-    [Authorize]
-    [AllowAnonymous]
+    [EnableRateLimiting("FixedWindow")]
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, int pageSize = 20)
     {
-        var users = await userService.GetAllUsers();
+        var users = await userService.GetAllUsersWithPagingOptions(page, pageSize);
         return Ok(users);
     }
 
@@ -29,6 +28,21 @@ public class UserController(UserService userService, AuthService authService) : 
         if (user is null) return NotFound();
 
         return Ok(user);
+    }
+
+    [HttpPost]
+    [Route("seed")]
+    public async Task<IActionResult> SeedUsers()
+    {
+
+        var users = Enumerable.Range(101, 200).Select(idx => new CreateUserDTO($"User {idx}", $"user{idx}@example.com")).ToList();
+        
+        foreach(var user in users)
+        {
+            await userService.AddUser(user);
+        }
+
+        return Ok();
     }
 
     [Authorize]

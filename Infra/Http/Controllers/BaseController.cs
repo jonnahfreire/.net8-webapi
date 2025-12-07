@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace API.Infra.Http.Controllers;
+namespace WebApi.Infra.Http.Controllers;
 
 [ApiController]
 public abstract class BaseController : ControllerBase

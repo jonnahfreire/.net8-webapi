@@ -1,9 +1,9 @@
-﻿using API.Application.Repository;
-using API.Domain.Entities;
-using API.Infra.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApi.Application.Repository;
+using WebApi.Domain.Entities;
+using WebApi.Infra.Database;
 
-namespace API.Infra.Repository;
+namespace WebApi.Infra.Repository;
 
 public class UserRepository(AppDbContext context) : Repository<User>(context), IUserRepository
 {

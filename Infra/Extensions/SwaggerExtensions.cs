@@ -1,9 +1,9 @@
-﻿using API.Infra.Extensions;
-using API.Infra.Http.Swagger;
-using Asp.Versioning.ApiExplorer;
+﻿using Asp.Versioning.ApiExplorer;
 using Microsoft.OpenApi.Models;
+using WebApi.Infra.Extensions;
+using WebApi.Infra.Http.Swagger;
 
-namespace API.Infra.Extensions;
+namespace WebApi.Infra.Extensions;
 
 public static class SwaggerExtensions
 {
@@ -63,6 +63,7 @@ public static class SwaggerExtensions
     {
         if (app.Environment.IsDevelopment())
         {
+            app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

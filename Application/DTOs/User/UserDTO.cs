@@ -1,4 +1,4 @@
-﻿namespace API.Application.DTOs;
+﻿namespace WebApi.Application.DTOs.User;
 public record UserDTO(
     Guid Id,
     string Name,

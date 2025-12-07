@@ -1,7 +1,7 @@
-﻿using API.Infra.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApi.Infra.Database;
 
-namespace API.Infra.Extensions;
+namespace WebApi.Infra.Extensions;
 
 public static class DBContextExtension
 {

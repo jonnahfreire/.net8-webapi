@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API.Application.DTOs;
+namespace WebApi.Application.DTOs.User;
 public record UpdateUserDTO(
     string? Name,
     [EmailAddress(ErrorMessage = "Email inválido")]

@@ -1,4 +1,4 @@
-﻿namespace API.Domain.Exceptions;
+﻿namespace WebApi.Domain.Exceptions;
 
 public class IllegalArgumentException : DomainException
 {

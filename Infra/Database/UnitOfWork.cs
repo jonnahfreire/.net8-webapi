@@ -1,5 +1,5 @@
-﻿using API.Application.Repository;
-namespace API.Infra.Database;
+﻿using WebApi.Application.Repository;
+namespace WebApi.Infra.Database;
 
 public class UnitOfWork(AppDbContext context) : IUnitOfWork
 {

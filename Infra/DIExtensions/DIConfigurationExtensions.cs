@@ -1,9 +1,9 @@
-﻿using API.Application.Repository;
-using API.Application.Services;
-using API.Infra.Database;
-using API.Infra.Repository;
+﻿using WebApi.Application.Repository;
+using WebApi.Application.Services;
+using WebApi.Infra.Database;
+using WebApi.Infra.Repository;
 
-namespace API.Infra.DIExtensions;
+namespace WebApi.Infra.DIExtensions;
 
 public static class DIConfigurationExtensions
 {

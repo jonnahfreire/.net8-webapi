@@ -1,30 +1,40 @@
-using API.Infra.Configuration;
-using API.Infra.DIExtensions;
-using API.Infra.Extensions;
-using API.Infra.Http.Middlewares;
+using WebApi.Infra.DIExtensions;
+using WebApi.Infra.Extensions;
+using WebApi.Infra.Http.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCorsPolicies();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configura Extensões
+// Extensões
 builder.Services.ConfigureDatabase(builder.Configuration);
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureServices();
 builder.Services.AddGlobalExceptionHandler();
 builder.Services.AddJsonOptions();
-builder.Services.AddJwtConfiguration(builder.Configuration); // Autenticação com JWT
-builder.Services.AddPolicies(builder.Configuration); // Policies
+builder.Services.AddJwtConfiguration(builder.Configuration); // JWT Auth
+builder.Services.AddAuthorizationPolicies(builder.Configuration); // Policies
 
 // Configura Swagger
 builder.Services.AddSwaggerServices();
-builder.Services.AddSwaggerAuthorization(); 
+builder.Services.AddSwaggerAuthorization();
+
+// Rate Limiter
+builder.Services.AddApiRateLimiter();
+
+// WebHost config
+builder.WebHost.AddWebHostConfiguration();
 
 var app = builder.Build();
-app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseSwaggerUI();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.UseCors("Default");
+app.UseRouting();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

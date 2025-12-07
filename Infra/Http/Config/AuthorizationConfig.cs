@@ -1,4 +1,4 @@
-﻿namespace API.Infra.Http.Config;
+﻿namespace WebApi.Infra.Http.Config;
 
 public class AuthorizationConfig
 {

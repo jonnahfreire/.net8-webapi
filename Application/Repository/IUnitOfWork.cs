@@ -1,4 +1,4 @@
-﻿namespace API.Application.Repository;
+﻿namespace WebApi.Application.Repository;
 
 public interface IUnitOfWork
 {

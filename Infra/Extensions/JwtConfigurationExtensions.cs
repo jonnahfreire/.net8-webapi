@@ -1,10 +1,10 @@
-﻿using API.Infra.Http.Config;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
+using WebApi.Infra.Http.Config;
 
-namespace API.Infra.Extensions;
+namespace WebApi.Infra.Extensions;
 
 public static class JwtConfigurationExtensions
 {

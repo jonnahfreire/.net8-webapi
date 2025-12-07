@@ -1,12 +1,12 @@
-﻿using API.Domain.Entities;
-using API.Infra.Http.Config;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApi.Domain.Entities;
+using WebApi.Infra.Http.Config;
 
-namespace API.Application.Services;
+namespace WebApi.Application.Services;
 
 public class AuthService(IOptionsSnapshot<AuthorizationConfig> authConfig)
 {

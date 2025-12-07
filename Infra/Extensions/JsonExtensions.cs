@@ -1,7 +1,8 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using WebApi.Infra.Extensions;
 
-namespace API.Infra.Extensions;
+namespace WebApi.Infra.Extensions;
 
 public static class JsonExtensions
 {

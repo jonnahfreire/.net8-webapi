@@ -1,14 +1,32 @@
-﻿using API.Application.DTOs;
-using API.Application.DTOs.User;
-using API.Application.Repository;
-using API.Domain.Entities;
-using API.Domain.Exceptions;
-using ArgumentNullException = API.Domain.Exceptions.ArgumentNullException;
+﻿using WebApi.Domain.Entities;
+using WebApi.Application.DTOs.User;
+using WebApi.Application.Repository;
+using WebApi.Domain.Exceptions;
+using ArgumentNullException = WebApi.Domain.Exceptions.ArgumentNullException;
 
-namespace API.Application.Services;
+namespace WebApi.Application.Services;
 
 public class UserService(IUserRepository userRepository, ILogger<UserService> logger, IUnitOfWork uow)
 {
+    public async Task<PagingOptions<IEnumerable<UserDTO>>> GetAllUsersWithPagingOptions(int page, int pageSize)
+    {
+        logger.LogInformation("Fetching all users from the database.");
+        var paging = await userRepository.GetAllWithPagingOptionsAsync(page, pageSize);
+        return new PagingOptions<IEnumerable<UserDTO>>(
+            paging.PageCount,
+            paging.ItemsPerPage,
+            paging.CurrentPage,
+            paging.ItemsCount,
+            paging.Items.Select(user => new UserDTO(
+                user.Id,
+                user.Name,
+                user.Email,
+                user.CreatedAt,
+                user.UpdatedAt
+            ))
+        );            
+    }
+    
     public async Task<IEnumerable<UserDTO>> GetAllUsers()
     {
         logger.LogInformation("Fetching all users from the database.");

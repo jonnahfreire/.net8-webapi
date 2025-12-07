@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace API.Infra.Extensions;
+namespace WebApi.Infra.Extensions;
 
 public static class GlobalExceptionHandlerExtensions
 {

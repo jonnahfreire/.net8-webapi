@@ -1,4 +1,4 @@
-﻿namespace API.Domain.Entities;
+﻿namespace WebApi.Domain.Entities;
 
 public class User(string name, string email): BaseEntity
 {

@@ -1,8 +1,8 @@
-﻿using API.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using WebApi.Domain.Entities;
 
-namespace API.Infra.Database;
+namespace WebApi.Infra.Database;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {

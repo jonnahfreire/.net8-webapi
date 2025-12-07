@@ -1,6 +1,6 @@
-﻿using API.Domain.Entities;
+﻿using WebApi.Domain.Entities;
 
-namespace API.Application.Repository;
+namespace WebApi.Application.Repository;
 
 public interface IUserRepository: IRepository<User>
 {
